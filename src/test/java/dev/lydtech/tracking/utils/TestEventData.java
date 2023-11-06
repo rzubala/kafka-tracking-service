@@ -1,6 +1,6 @@
 package dev.lydtech.tracking.utils;
 
-import dev.lydtech.tracking.message.DispatchPreparing;
+import dev.lydtech.dispatch.message.DispatchPreparing;
 import dev.lydtech.tracking.message.TrackingStatus;
 import dev.lydtech.tracking.message.TrackingStatusUpdated;
 
