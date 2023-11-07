@@ -34,30 +34,9 @@ import static org.hamcrest.Matchers.equalTo;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @ActiveProfiles("test")
 @EmbeddedKafka(controlledShutdown = true)
-public class TrackingIntegrationTest {
+public class TrackingIntegrationTest extends KafkaIntegrationTest {
 
     private final static String DISPATCH_TRACKING_TOPIC = "dispatch.tracking";  // input
-
-    @Autowired
-    private KafkaTemplate kafkaTemplate;
-
-    @Autowired
-    private EmbeddedKafkaBroker embeddedKafkaBroker;
-
-    @Autowired
-    private KafkaListenerEndpointRegistry registry;
-
-    @Autowired
-    private KafkaTestListener testListener;
-
-    @BeforeEach
-    public void setUp() {
-        testListener.trackingStatusCounter.set(0);
-
-        // Wait until the partitions are assigned.
-        registry.getListenerContainers().forEach(container ->
-                ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic()));
-    }
 
     @Test
     public void testOrderTrackingFlow() throws Exception {
@@ -66,12 +45,5 @@ public class TrackingIntegrationTest {
 
         await().atMost(3, TimeUnit.SECONDS).pollDelay(100, TimeUnit.MILLISECONDS)
                 .until(testListener.trackingStatusCounter::get, equalTo(1));
-    }
-
-    private void sendMessage(String topic, Object data) throws Exception {
-        kafkaTemplate.send(MessageBuilder
-                .withPayload(data)
-                .setHeader(KafkaHeaders.TOPIC, topic)
-                .build()).get();
     }
 }
