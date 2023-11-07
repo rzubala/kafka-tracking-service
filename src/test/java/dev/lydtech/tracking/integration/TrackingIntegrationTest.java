@@ -38,8 +38,6 @@ public class TrackingIntegrationTest {
 
     private final static String DISPATCH_TRACKING_TOPIC = "dispatch.tracking";  // input
 
-    private final static String TRACKING_STATUS_TOPIC = "tracking.status";  // output
-
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
@@ -48,25 +46,6 @@ public class TrackingIntegrationTest {
 
     @Autowired
     private KafkaListenerEndpointRegistry registry;
-
-    @Configuration
-    static class TestConfig {
-
-        @Bean
-        public KafkaTestListener testListener() {
-            return new KafkaTestListener();
-        }
-    }
-
-    public static class KafkaTestListener {
-        AtomicInteger trackingStatusCounter = new AtomicInteger(0);
-
-        @KafkaListener(groupId = "KafkaIntegrationTest", topics = TRACKING_STATUS_TOPIC)
-        void receiveTrackingStatus(@Payload TrackingStatusUpdated payload) {
-            log.debug("Received TrackingStatusUpdated: " + payload);
-            trackingStatusCounter.incrementAndGet();
-        }
-    }
 
     @Autowired
     private KafkaTestListener testListener;
