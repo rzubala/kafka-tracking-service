@@ -19,7 +19,7 @@ public class TrackingService {
     public void sendStatus(DispatchPreparing dispatchPreparing) throws Exception {
         TrackingStatusUpdated trackingStatusUpdated = TrackingStatusUpdated.builder()
                 .orderId(dispatchPreparing.getOrderId())
-                .status(TrackingStatus.INITIAL)
+                .status(TrackingStatus.PREPARING)
                 .build();
 
         kafkaProducer.send(TRACKING_STATUS_TOPIC, trackingStatusUpdated).get();

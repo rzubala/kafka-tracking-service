@@ -14,14 +14,14 @@ public class TestEventData {
     public static TrackingStatusUpdated buildTrackingStatusUpdatedRandom() {
         return TrackingStatusUpdated.builder()
                 .orderId(UUID.randomUUID())
-                .status(TrackingStatus.IN_PROGRESS)
+                .status(TrackingStatus.PREPARING)
                 .build();
     }
 
     public static TrackingStatusUpdated buildTrackingStatusUpdated(DispatchPreparing dispatchPreparing) {
         return TrackingStatusUpdated.builder()
                 .orderId(dispatchPreparing.getOrderId())
-                .status(TrackingStatus.IN_PROGRESS)
+                .status(TrackingStatus.PREPARING)
                 .build();
     }
 }
