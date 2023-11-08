@@ -1,5 +1,6 @@
 package dev.lydtech.tracking.integration;
 
+import dev.lydtech.dispatch.message.DispatchCompleted;
 import dev.lydtech.dispatch.message.DispatchPreparing;
 import dev.lydtech.tracking.TrackingConfiguration;
 import dev.lydtech.dispatch.message.TrackingStatusUpdated;
@@ -42,6 +43,15 @@ public class TrackingIntegrationTest extends KafkaIntegrationTest {
     public void testOrderTrackingFlow() throws Exception {
         DispatchPreparing dispatchPreparing = TestEventData.buildDispatchPreparingRandomData();
         sendMessage(DISPATCH_TRACKING_TOPIC, dispatchPreparing);
+
+        await().atMost(3, TimeUnit.SECONDS).pollDelay(100, TimeUnit.MILLISECONDS)
+                .until(testListener.trackingStatusCounter::get, equalTo(1));
+    }
+
+    @Test
+    public void testOrderTrackingCompletedFlow() throws Exception {
+        DispatchCompleted dispatchCompleted = TestEventData.buildDispatchCompletedRandomData();
+        sendMessage(DISPATCH_TRACKING_TOPIC, dispatchCompleted);
 
         await().atMost(3, TimeUnit.SECONDS).pollDelay(100, TimeUnit.MILLISECONDS)
                 .until(testListener.trackingStatusCounter::get, equalTo(1));

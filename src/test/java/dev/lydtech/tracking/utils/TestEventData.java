@@ -1,5 +1,6 @@
 package dev.lydtech.tracking.utils;
 
+import dev.lydtech.dispatch.message.DispatchCompleted;
 import dev.lydtech.dispatch.message.DispatchPreparing;
 import dev.lydtech.dispatch.message.TrackingStatus;
 import dev.lydtech.dispatch.message.TrackingStatusUpdated;
@@ -23,5 +24,9 @@ public class TestEventData {
                 .orderId(dispatchPreparing.getOrderId())
                 .status(TrackingStatus.PREPARING)
                 .build();
+    }
+
+    public static DispatchCompleted buildDispatchCompletedRandomData() {
+        return DispatchCompleted.builder().orderId(UUID.randomUUID()).build();
     }
 }

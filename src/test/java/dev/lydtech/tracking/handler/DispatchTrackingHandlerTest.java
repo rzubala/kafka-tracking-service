@@ -1,5 +1,6 @@
 package dev.lydtech.tracking.handler;
 
+import dev.lydtech.dispatch.message.DispatchCompleted;
 import dev.lydtech.dispatch.message.DispatchPreparing;
 import dev.lydtech.tracking.service.TrackingService;
 import dev.lydtech.tracking.utils.TestEventData;
@@ -30,6 +31,14 @@ class DispatchTrackingHandlerTest {
     }
 
     @Test
+    void listen_CompletedSuccess() throws Exception {
+        DispatchCompleted dispatchCompleted = TestEventData.buildDispatchCompletedRandomData();
+        dispatchTrackingHandler.listen(dispatchCompleted);
+
+        verify(trackingServiceMock, times(1)).sendStatus(dispatchCompleted);
+    }
+
+    @Test
     void listen_ServiceThrowsException() throws Exception {
         DispatchPreparing dispatchPreparing = TestEventData.buildDispatchPreparingRandomData();
         doThrow(new RuntimeException("Service failure")).when(trackingServiceMock).sendStatus(dispatchPreparing);
@@ -37,5 +46,15 @@ class DispatchTrackingHandlerTest {
         dispatchTrackingHandler.listen(dispatchPreparing);
 
         verify(trackingServiceMock, times(1)).sendStatus(dispatchPreparing);
+    }
+
+    @Test
+    void listen_CompletedServiceThrowsException() throws Exception {
+        DispatchCompleted dispatchCompleted = TestEventData.buildDispatchCompletedRandomData();
+        doThrow(new RuntimeException("Service failure")).when(trackingServiceMock).sendStatus(dispatchCompleted);
+
+        dispatchTrackingHandler.listen(dispatchCompleted);
+
+        verify(trackingServiceMock, times(1)).sendStatus(dispatchCompleted);
     }
 }
