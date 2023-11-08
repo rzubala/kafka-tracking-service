@@ -13,4 +13,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DispatchCompleted {
     private UUID orderId;
+    String dispatchedDate;
 }
